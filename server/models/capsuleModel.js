@@ -3,8 +3,10 @@ const capsuleSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
-    media: { type: String },
+    media: { type: String, default: null },
     date: { type: Date, default: Date.now },
+    status: { type: String, enum: ["locked", "unclocked"], default: "locked" },
+    privacy: { type: String, enum: ["public", "private"], default: "private" },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

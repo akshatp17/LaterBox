@@ -1,21 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-router
-  .route("/")
-  .get((req, res) => {
-    // Logic to get all capsules
-    res.status(200).json({ message: "Get all capsules" });
-  })
-  .post((req, res) => {
-    // Logic to create a new capsule
-    res.status(201).json({ message: "Capsule created" });
-  });
+const {
+  createCapsule,
+  getAllCapsules,
+  getCapsuleById,
+} = require("../controllers/capsuleController");
 
-router.route("/:id").get((req, res) => {
-  // Logic to get a capsule by ID
-  const capsuleId = req.params.id;
-  res.status(200).json({ message: `Get capsule with ID: ${capsuleId}` });
-});
+router.route("/").get(getAllCapsules).post(createCapsule);
+
+router.route("/:id").get(getCapsuleById);
 
 module.exports = router;
