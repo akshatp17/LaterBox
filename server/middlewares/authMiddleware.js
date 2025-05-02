@@ -9,6 +9,7 @@ module.exports = async (req, res, next) => {
           message: "Auth failed",
         });
       } else {
+        req.body = req.body || {};
         req.body.userId = decode.userId;
         next();
       }
