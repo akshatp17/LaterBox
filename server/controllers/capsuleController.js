@@ -3,7 +3,7 @@ const capsule = require("../models/capsuleModel");
 const createCapsule = async (req, res) => {
   try {
     const { title, description, media, date, status, privacy } = req.body;
-    const userId = req.body.userId; // Assuming userId is sent in the request body
+    const userId = req.body.userId;
 
     const newCapsule = new capsule({
       title,
