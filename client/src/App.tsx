@@ -1,11 +1,10 @@
-import AppRoutes from "./routes/Router.tsx";
+import React from 'react'
 
 const App = () => {
   return (
-    <>
-      <AppRoutes />
-    </>
-  );
-};
+    <div>
+    </div>
+  )
+}
 
-export default App;
+export default App
