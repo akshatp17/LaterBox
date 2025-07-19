@@ -1,9 +1,9 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
+import checkAuthentication from "../hooks/checkAuthentication";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-    const isAuthenticated = localStorage.getItem("userToken"); // Example authentication check
-
+    const isAuthenticated = checkAuthentication();
     return isAuthenticated ? children : <Navigate to="/" />;
 };
 

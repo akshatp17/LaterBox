@@ -1,10 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 import LandingPage from '../pages/landing'
+import LoginPage from '../pages/authenticate/login'
+import RegisterPage from '../pages/authenticate/register'
+import ProtectedRoute from './protected-route'
 
 // Lazy Loading Every Other Page
-const LoginPage = lazy(() => import('../pages/authenticate/login'))
-const RegisterPage = lazy(() => import('../pages/authenticate/register'))
+const HomePage = lazy(() => import('../pages/home-page'))
 
 const AppRouter = () => {
     return (
@@ -17,6 +19,14 @@ const AppRouter = () => {
                     <Route path="/register" element={<RegisterPage />} />
 
                     {/* Protected routes */}
+                    <Route
+                        path="/home"
+                        element={
+                            <ProtectedRoute>
+                                <HomePage />
+                            </ProtectedRoute>
+                        }
+                    />
 
                 </Routes>
             </Suspense>

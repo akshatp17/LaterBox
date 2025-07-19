@@ -52,16 +52,16 @@ const PricingSection = () => {
                             </li>
                         </ul>
 
-                        <button className="w-full bg-gray-900 text-white py-3 px-6 rounded-lg hover:bg-gray-800 transition-colors font-medium">
+                        <button className="w-full bg-gray-900 text-white py-3 px-6 rounded-lg hover:bg-gray-800 transition-colors font-medium cursor-pointer">
                             Start free →
                         </button>
                     </div>
 
                     {/* Pro Plan */}
-                    <div className="bg-white rounded-2xl border-2 border-purple-500 p-8 w-full lg:w-96 relative">
+                    <div className="bg-white rounded-2xl border-2 border-blue-500 p-8 w-full lg:w-96 relative">
                         {/* Recommended Badge */}
                         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                            <span className="bg-purple-500 text-white px-6 py-2 rounded-full text-sm font-medium">
+                            <span className="bg-blue-500 text-white px-6 py-2 rounded-full text-sm font-medium">
                                 RECOMMENDED
                             </span>
                         </div>
@@ -100,7 +100,7 @@ const PricingSection = () => {
                             </li>
                         </ul>
 
-                        <button className="w-full bg-purple-500 text-white py-3 px-6 rounded-lg hover:bg-purple-600 transition-colors font-medium">
+                        <button className="w-full bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors font-medium cursor-pointer">
                             Get started →
                         </button>
                     </div>
