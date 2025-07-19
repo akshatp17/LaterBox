@@ -1,9 +1,8 @@
-import React from 'react'
+import AppRouter from './routes/routes'
 
 const App = () => {
   return (
-    <div>
-    </div>
+    <AppRouter />
   )
 }
 
