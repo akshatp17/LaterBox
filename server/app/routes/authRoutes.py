@@ -27,9 +27,16 @@ def login():
         user = User.objects(email=email).first()
         if user and user.password == password:
             token = create_access_token(identity=email)
-            return jsonify({"message": "Login successful","token":token}), 200
+            return jsonify({
+            "message": "User Logged in successfully",
+            "success": True,
+            "token": token,
+            "user": {
+                "email": user.email
+            }
+            }), 201
         else:
-            return jsonify({"message": "Invalid credentials"}), 401
+            return jsonify({"message": "Invalid credentials", "success": False}), 401
 
 # User Register
 @auth_bp.route("/register", methods=["POST"])
@@ -51,10 +58,10 @@ def register():
         is_paid = request_data.get("is_paid", "false")
 
         if User.objects(email=email).first():
-            return jsonify({"message": "Email already exists"}), 400
+            return jsonify({"message": "Email already exists", "success": False}), 400
         
         if User.objects(username=username).first():
-            return jsonify({"message": "Username already exists"}), 400
+            return jsonify({"message": "Username already exists", "success": False}), 400
         
         user = User(
             email=email,
@@ -69,8 +76,15 @@ def register():
         token = create_access_token(identity=email)
         return jsonify({
             "message": "User registered successfully",
+            "success": True,
             "token": token,
-            "user": user.to_mongo().to_dict()
+            "user": {
+                "email": user.email,
+                "name": user.name,
+                "username": user.username,
+                "profile_picture": user.profile_picture,
+                "is_paid": user.is_paid
+            }
             }), 201
 
 def register_google_oauth(app, oauth):

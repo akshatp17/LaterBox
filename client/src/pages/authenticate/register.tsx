@@ -1,8 +1,11 @@
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
+import { registerUser } from '../../services/authServices';
 
 interface RegisterFormInputs {
+    name: string
+    username: string
     email: string
     password: string
     confirmPassword: string
@@ -14,7 +17,6 @@ const Register = () => {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
-        reset: resetForm,
         watch
     } = useForm<RegisterFormInputs>()
 
@@ -26,12 +28,17 @@ const Register = () => {
         try {
             // Remove confirmPassword before sending to backend
             const { confirmPassword, ...registrationData } = data
-            console.log('Registration data:', registrationData)
-            navigate('/home')
+            const response = await registerUser({
+                ...registrationData,
+                is_google: false
+            });
+            console.log("Registration response:", response);
+            if (response && response.token) {
+                localStorage.setItem('token', response.token);
+                navigate('/home');
+            }
         } catch (error) {
             console.error('Registration error:', error)
-        } finally {
-            resetForm()
         }
     }
 
@@ -62,6 +69,54 @@ const Register = () => {
 
                     {/* Form for login */}
                     <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
+                        <div>
+                            <label className='block text-sm font-medium text-gray-700 mb-1'>
+                                Full Name
+                            </label>
+                            <input
+                                type="text"
+                                {...register('name', {
+                                    required: 'Full name is required',
+                                    minLength: {
+                                        value: 2,
+                                        message: 'Name must be at least 2 characters'
+                                    }
+                                })}
+                                className={`w-full px-3 py-2 border rounded-md focus:outline-none ${errors.name ? 'border-red-300' : 'border-gray-300'
+                                    }`}
+                                placeholder='Enter your full name'
+                            />
+                            {errors.name && (
+                                <p className='mt-1 text-sm text-red-600'>{errors.name.message}</p>
+                            )}
+                        </div>
+
+                        <div>
+                            <label className='block text-sm font-medium text-gray-700 mb-1'>
+                                Username
+                            </label>
+                            <input
+                                type="text"
+                                {...register('username', {
+                                    required: 'Username is required',
+                                    minLength: {
+                                        value: 3,
+                                        message: 'Username must be at least 3 characters'
+                                    },
+                                    pattern: {
+                                        value: /^[a-zA-Z0-9_]+$/,
+                                        message: 'Username can only contain letters, numbers, and underscores'
+                                    }
+                                })}
+                                className={`w-full px-3 py-2 border rounded-md focus:outline-none ${errors.username ? 'border-red-300' : 'border-gray-300'
+                                    }`}
+                                placeholder='Choose a username'
+                            />
+                            {errors.username && (
+                                <p className='mt-1 text-sm text-red-600'>{errors.username.message}</p>
+                            )}
+                        </div>
+
                         <div>
                             <label className='block text-sm font-medium text-gray-700 mb-1'>
                                 Email

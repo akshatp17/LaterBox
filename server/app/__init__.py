@@ -14,6 +14,7 @@ def create_app():
     app.config.from_object(Config)
     CORS(app)
     login_manager.init_app(app)
+    jwt.init_app(app)
     # MongoDB connection
     connect(
         host=app.config["MONGO_URI"],

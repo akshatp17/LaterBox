@@ -1,6 +1,7 @@
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
+import { loginUser } from '../../services/authServices';
 
 interface LoginFormInputs {
     email: string
@@ -12,8 +13,7 @@ const Login = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
-        reset: resetForm
+        formState: { errors, isSubmitting }
     } = useForm<LoginFormInputs>()
 
     const navigate = useNavigate()
@@ -21,12 +21,20 @@ const Login = () => {
     // Form Submission Handler
     const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
         try {
-            console.log('Login data:', data)
-            navigate('/home')
+            const response = await loginUser({
+                email: data.email,
+                password: data.password,
+                is_google: false
+            });
+            console.log("Login response:", response);
+
+            if (response && response.token) {
+                localStorage.setItem('token', response.token);
+                navigate('/home');
+            }
+
         } catch (error) {
             console.error('Login error:', error)
-        } finally {
-            resetForm()
         }
     }
 
