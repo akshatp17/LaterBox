@@ -3,7 +3,9 @@ from flask_login import LoginManager
 from flask_cors import CORS
 from config import Config
 from mongoengine import connect
+from flask_jwt_extended import JWTManager
 
+jwt = JWTManager()
 login_manager = LoginManager()
 login_manager.login_view = "auth.login"
 
@@ -12,7 +14,6 @@ def create_app():
     app.config.from_object(Config)
     CORS(app)
     login_manager.init_app(app)
-    
     # MongoDB connection
     connect(
         host=app.config["MONGO_URI"],
