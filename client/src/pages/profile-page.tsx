@@ -15,6 +15,7 @@ const ProfilePage = () => {
                     document.title = `${userProfile.user.name}'s Profile | LaterBox`;
                 } catch (error) {
                     console.error("Error fetching user profile:", error);
+                    navigate('/error', { replace: true });
                 }
             }
             fetchUserProfile();

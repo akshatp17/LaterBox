@@ -4,6 +4,7 @@ import LandingPage from '../pages/landing'
 import LoginPage from '../pages/authenticate/login'
 import RegisterPage from '../pages/authenticate/register'
 import PageLoader from '../skeletons/loader'
+import ErrorPage from '../pages/error-page'
 
 // Lazy Loading Every Other Page
 const HomePage = lazy(() => import('../pages/home-page'))
@@ -14,7 +15,7 @@ const AppRouter = () => {
         <Router>
             <Suspense fallback={<PageLoader />}>
                 <Routes>
-                    {/* Unprotected routes  */}
+
                     <Route path="/" element={<LandingPage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
@@ -22,6 +23,9 @@ const AppRouter = () => {
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/profile/:username" element={<ProfilePage />} />
 
+
+                    {/* Catch-all route for 404 Not Found */}
+                    <Route path="*" element={<ErrorPage />} />
                 </Routes>
             </Suspense>
         </Router>
