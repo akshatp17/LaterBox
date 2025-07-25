@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, redirect, url_for, current_app, request
 from authlib.integrations.flask_client import OAuth
 from app.models.userModel import User
+from app.middlewares.checkToken import check_token_middleware
 from flask_jwt_extended import (
     create_access_token, jwt_required, get_jwt_identity
 )
@@ -17,7 +18,7 @@ def login():
     # Handle Google login logic here
     if is_google:
         token = create_access_token(identity=email)
-        return jsonify({"message": "Google login endpoint"}), 200
+        return jsonify({"success":True,"message": "Google login endpoint"}), 200
     
     # Handle regular login logic here
     else:
@@ -46,7 +47,7 @@ def register():
     
     # Handle Google registration logic here
     if is_google:
-        return jsonify({"message": "Google registration endpoint"}), 200
+        return jsonify({"success":True,"message": "Google registration endpoint"}), 200
 
     # Handle regular registration logic here
     else:
@@ -58,10 +59,10 @@ def register():
         is_paid = request_data.get("is_paid", "false")
 
         if User.objects(email=email).first():
-            return jsonify({"message": "Email already exists", "success": False}), 400
+            return jsonify({"success":False,"message": "Email already exists", "success": False}), 400
         
         if User.objects(username=username).first():
-            return jsonify({"message": "Username already exists", "success": False}), 400
+            return jsonify({"success":False,"message": "Username already exists", "success": False}), 400
         
         user = User(
             email=email,
@@ -86,6 +87,16 @@ def register():
                 "is_paid": user.is_paid
             }
             }), 201
+    
+@auth_bp.route("/check_auth", methods=["GET"])
+@check_token_middleware
+def check_auth():
+    user_email = request.user_email
+    if not user_email:
+        return jsonify({"success":False,"message": "User not authenticated"}), 401
+    
+    return jsonify({"success":True,"message": "User is authenticated", "email": user_email}), 200
+
 
 def register_google_oauth(app, oauth):
     oauth.init_app(app)

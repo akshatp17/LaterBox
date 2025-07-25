@@ -5,6 +5,10 @@ from config import Config
 from mongoengine import connect
 from flask_jwt_extended import JWTManager
 
+#Importing Routes and Blueprints
+from app.routes.authRoutes import auth_bp, oauth, register_google_oauth
+from app.routes.userRoutes import user_bp
+
 jwt = JWTManager()
 login_manager = LoginManager()
 login_manager.login_view = "auth.login"
@@ -21,9 +25,10 @@ def create_app():
         alias="default"
     )
 
-    from app.routes.authRoutes import auth_bp, oauth, register_google_oauth
     register_google_oauth(app, oauth)
     app.register_blueprint(auth_bp, url_prefix="/auth")
+
+    app.register_blueprint(user_bp, url_prefix="/user")
 
     @app.cli.command("db_create")
     def db_create():
