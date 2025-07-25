@@ -3,7 +3,6 @@ import { lazy, Suspense } from 'react'
 import LandingPage from '../pages/landing'
 import LoginPage from '../pages/authenticate/login'
 import RegisterPage from '../pages/authenticate/register'
-import ProtectedRoute from './protected-route'
 import PageLoader from '../skeletons/loader'
 
 // Lazy Loading Every Other Page
@@ -22,11 +21,7 @@ const AppRouter = () => {
                     {/* Protected routes */}
                     <Route
                         path="/home"
-                        element={
-                            <ProtectedRoute>
-                                <HomePage />
-                            </ProtectedRoute>
-                        }
+                        element={<HomePage />}
                     />
 
                 </Routes>

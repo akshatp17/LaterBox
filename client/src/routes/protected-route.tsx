@@ -28,7 +28,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     }
 
     // Redirect to home if not authenticated
-    return isAuthenticated ? children : <Navigate to="/" />;
+    return isAuthenticated ? children : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;
