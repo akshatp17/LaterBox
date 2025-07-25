@@ -7,6 +7,7 @@ import PageLoader from '../skeletons/loader'
 
 // Lazy Loading Every Other Page
 const HomePage = lazy(() => import('../pages/home-page'))
+const ProfilePage = lazy(() => import('../pages/profile-page'))
 
 const AppRouter = () => {
     return (
@@ -17,12 +18,9 @@ const AppRouter = () => {
                     <Route path="/" element={<LandingPage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
-
-                    {/* Protected routes */}
-                    <Route
-                        path="/home"
-                        element={<HomePage />}
-                    />
+                    <Route path="/home" element={<HomePage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/profile/:username" element={<ProfilePage />} />
 
                 </Routes>
             </Suspense>
