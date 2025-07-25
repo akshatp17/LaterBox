@@ -2,6 +2,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../../services/authServices';
+import { useState } from 'react';
 
 interface RegisterFormInputs {
     name: string
@@ -13,6 +14,10 @@ interface RegisterFormInputs {
 }
 
 const Register = () => {
+
+    // Set document title
+    document.title = "Register | LaterBox";
+
     const {
         register,
         handleSubmit,
@@ -20,11 +25,18 @@ const Register = () => {
         watch
     } = useForm<RegisterFormInputs>()
 
+    const [tncChecked, setTncChecked] = useState<boolean>(false)
+
     const navigate = useNavigate()
     const watchPassword = watch('password')
 
     // Form Submission Handler
     const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
+        if (!tncChecked) {
+            alert('Please agree to the Terms and Conditions to proceed.');
+            return;
+        }
+
         try {
             // Remove confirmPassword before sending to backend
             const { confirmPassword, ...registrationData } = data
@@ -34,7 +46,7 @@ const Register = () => {
             });
             console.log("Registration response:", response);
             if (response && response.token) {
-                localStorage.setItem('token', response.token);
+                localStorage.setItem('userToken', response.token);
                 navigate('/home');
             }
         } catch (error) {
@@ -44,6 +56,11 @@ const Register = () => {
 
     // Google Login Handler
     const handleGoogleLogin = async (credentialResponse: any) => {
+        if (!tncChecked) {
+            alert('Please agree to the Terms and Conditions to proceed with Google registration.');
+            return;
+        }
+
         const idToken = credentialResponse.credential;
         try {
             console.log("Google login ID token:", idToken);
@@ -181,23 +198,34 @@ const Register = () => {
                             )}
                         </div>
 
-                        <div className='flex items-center justify-center'>
+                        <div className='flex flex-col items-center justify-center'>
                             <label className='flex items-center'>
                                 <input
                                     type="checkbox"
-                                    {...register('rememberMe')}
+                                    onChange={(e) => setTncChecked(e.target.checked)}
                                     className='mr-2'
                                 />
-                                <span className='text-sm text-gray-600'>I agree to the Terms and Conditions</span>
+                                <span className='text-sm text-gray-600'>
+                                    I agree to the{' '}
+                                    <a href="/tnc" className='text-blue-600 hover:underline'>
+                                        Terms and Conditions
+                                    </a>
+                                    <span className='text-red-500'> *</span>
+                                </span>
                             </label>
+                            {!tncChecked && (
+                                <p className='text-center text-xs text-gray-500'>
+                                    Please accept the Terms and Conditions to continue
+                                </p>
+                            )}
                         </div>
 
                         <button
                             type="submit"
-                            disabled={isSubmitting}
-                            className={`w-full py-2 px-4 rounded-md focus:outline-none cursor-pointer ${isSubmitting
-                                ? 'bg-blue-400 cursor-not-allowed text-white'
-                                : 'bg-blue-600 text-white hover:bg-blue-700'
+                            disabled={isSubmitting || !tncChecked}
+                            className={`w-full py-2 px-4 rounded-md focus:outline-none ${isSubmitting || !tncChecked
+                                ? 'bg-gray-400 cursor-not-allowed text-white'
+                                : 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer'
                                 }`}
                         >
                             {isSubmitting ? 'Creating Account...' : 'Register'}
@@ -218,7 +246,7 @@ const Register = () => {
                         </div>
 
                         <div className={`mt-6 w-full flex justify-center`}>
-                            <div>
+                            <div className={`${!tncChecked ? 'opacity-50 pointer-events-none' : ''}`}>
                                 <GoogleOAuthProvider clientId="712195196239-337nnqqvle3hq9biuc5302m7p2be6a8s.apps.googleusercontent.com">
                                     <GoogleLogin
                                         onSuccess={(credentialResponse) => {

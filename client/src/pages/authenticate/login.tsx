@@ -10,6 +10,10 @@ interface LoginFormInputs {
 }
 
 const Login = () => {
+
+    // Set document title
+    document.title = "Login | LaterBox";
+
     const {
         register,
         handleSubmit,
@@ -29,7 +33,7 @@ const Login = () => {
             console.log("Login response:", response);
 
             if (response && response.token) {
-                localStorage.setItem('token', response.token);
+                localStorage.setItem('userToken', response.token);
                 navigate('/home');
             }
 

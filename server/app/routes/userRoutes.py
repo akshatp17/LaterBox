@@ -35,6 +35,7 @@ def get_default_profile():
 
 # Get User Profile by ID
 @user_bp.route("/profile/<string:user_id>", methods=["GET"])
+@check_token_middleware
 def get_user_profile(user_id):
     try:
         user = User.objects(id=user_id).first()
@@ -58,6 +59,7 @@ def get_user_profile(user_id):
 
 # Get all Users
 @user_bp.route("/all", methods=["GET"])
+@check_token_middleware
 def get_all_users():
     try:
         users = User.objects()

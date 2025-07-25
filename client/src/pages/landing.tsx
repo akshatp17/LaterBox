@@ -7,6 +7,10 @@ import PricingSection from "../components/landing/pricing-section"
 import FAQSection from "../components/landing/faq-section"
 
 const LandingPage = () => {
+
+    // Set document title
+    document.title = "LaterBox";
+
     return (
         <div className="flex flex-col w-screen h-screen overflow-x-hidden">
             <LandingNavbar />
