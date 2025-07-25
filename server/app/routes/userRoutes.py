@@ -102,7 +102,31 @@ def get_all_users():
 @user_bp.route("/profile/update", methods=["PUT"])
 @check_token_middleware
 def update_user_profile():
-    pass
+    try:
+        usermail = request.user_email
+        if not usermail:
+            return jsonify({"success":False,"message": "User Mail is required"}), 400
+        
+        user = User.objects(email=usermail).first()
+        if not user:
+            return jsonify({"success":False,"message": "User not found"}), 404
+        
+        #Logic to update user profile
+        if 'username' in request.json:
+            if User.objects(username=request.json['username']).first():
+                return jsonify({"success":False,"message": "Username already exists"}), 400
+            user.username = request.json['username']
+        if 'name' in request.json:
+            user.name = request.json['name']
+        if 'profile_picture' in request.json:
+            user.profile_picture = request.json['profile_picture']
+
+        user.save()
+        return jsonify({"success":True,"message": "User profile updated successfully"}), 200
+
+    except Exception as e:
+        current_app.logger.error(f"Error updating user profile: {e}")
+        return jsonify({"success":False,"message": "Internal server error"}), 500
 
 # Delete User Profile
 @user_bp.route("/profile/delete", methods=["DELETE"])
