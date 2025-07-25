@@ -100,5 +100,26 @@ def get_all_users():
 
 # Update User Profile
 @user_bp.route("/profile/update", methods=["PUT"])
+@check_token_middleware
 def update_user_profile():
     pass
+
+# Delete User Profile
+@user_bp.route("/profile/delete", methods=["DELETE"])
+@check_token_middleware
+def delete_user_profile():
+    try:
+        usermail = request.user_email
+        if not usermail:
+            return jsonify({"success":False,"message": "User Mail is required"}), 400
+        
+        user = User.objects(email=usermail).first()
+        if not user:
+            return jsonify({"success":False,"message": "User not found"}), 404
+        
+        user.delete()
+        return jsonify({"success":True,"message": "User deleted successfully"}), 200
+    
+    except Exception as e:
+        current_app.logger.error(f"Error deleting user profile: {e}")
+        return jsonify({"success":False,"message": "Internal server error"}), 500
