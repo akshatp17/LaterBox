@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**LaterBox** is a digital time capsule app built with the MERN stack. Write messages, upload videos, or drop files — and lock them away until a future date. Perfect for sending something to your future self, preserving digital memories, or scheduling emotional surprises.
+**LaterBox** is a digital time capsule platform that lets you create or generate messages (text/audio/video) for yourself or your friends and lock them away until a future date. Whether it's a heartfelt note to your future self, a surprise for a friend, or an AI-generated version, LaterBox makes it timeless.
 
 ---
 
